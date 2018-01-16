@@ -6,7 +6,7 @@ import (
 )
 
 func parse(tokens *[]token) (expression, error) {
-	stack := make([]expression, 0)
+	var stack []expression
 	for _, token := range *tokens {
 		if token.tokenType == number {
 			value, _ := strconv.Atoi(token.value)

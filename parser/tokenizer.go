@@ -35,8 +35,8 @@ func tokenize(text string) ([]token, error) {
 
 func shuntingYard(tokens *[]token) ([]token, error) {
 
-	output := make([]token, 0)
-	stack := make([]token, 0)
+	var output []token
+	var stack []token
 
 	for _, token := range *tokens {
 		if token.isOperand() {

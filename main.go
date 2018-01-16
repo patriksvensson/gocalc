@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/patriksvensson/gocalc/parsing"
+	"github.com/patriksvensson/gocalc/parser"
 )
 
 func main() {
-
-	tokens, err := parsing.Tokenize("12 + (4 - 5)")
+	res, err := parser.Evaluate("1 + (1 - 3) + 7 - (1)")
 	if err != nil {
-		panic(err)
+		fmt.Printf("Ooops! %s", err)
+		return
 	}
 
-	fmt.Printf("%v", parsing.Parse(&tokens))
+	fmt.Printf("%d", res)
 }

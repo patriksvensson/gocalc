@@ -1,4 +1,4 @@
-package parsing
+package parser
 
 import (
 	"errors"
@@ -7,36 +7,36 @@ import (
 	"text/scanner"
 )
 
-func Tokenize(text string) ([]Token, error) {
+func tokenize(text string) ([]token, error) {
 
 	var s scanner.Scanner
 	s.Init(strings.NewReader(text))
 
-	var tokens []Token
-	for token := s.Scan(); token != scanner.EOF; token = s.Scan() {
+	var tokens []token
+	for t := s.Scan(); t != scanner.EOF; t = s.Scan() {
 		value := s.TokenText()
-		if token == scanner.Int {
-			tokens = append(tokens, Token{Type: Number, Value: value})
+		if t == scanner.Int {
+			tokens = append(tokens, token{tokenType: number, value: value})
 		} else if value == "+" {
-			tokens = append(tokens, Token{Type: Plus, Value: "+"})
+			tokens = append(tokens, token{tokenType: plus, value: "+"})
 		} else if value == "-" {
-			tokens = append(tokens, Token{Type: Minus, Value: "-"})
+			tokens = append(tokens, token{tokenType: minus, value: "-"})
 		} else if value == "(" {
-			tokens = append(tokens, Token{Type: OpeningParenthesis, Value: "("})
+			tokens = append(tokens, token{tokenType: openingParenthesis, value: "("})
 		} else if value == ")" {
-			tokens = append(tokens, Token{Type: ClosingParenthesis, Value: ")"})
+			tokens = append(tokens, token{tokenType: closingParenthesis, value: ")"})
 		} else {
-			return nil, errors.New(fmt.Sprintf("Unknown token '%s'", value))
+			return nil, errors.New(fmt.Sprintf("Unknown token '%s'.", value))
 		}
 	}
 
-	return shuntingYard(&tokens), nil
+	return shuntingYard(&tokens)
 }
 
-func shuntingYard(tokens *[]Token) []Token {
+func shuntingYard(tokens *[]token) ([]token, error) {
 
-	output := make([]Token, 0)
-	stack := make([]Token, 0)
+	output := make([]token, 0)
+	stack := make([]token, 0)
 
 	for _, token := range *tokens {
 		if token.isOperand() {
@@ -57,13 +57,13 @@ func shuntingYard(tokens *[]Token) []Token {
 			}
 			// Push the current operator onto the stack.
 			stack = append(stack, token)
-		} else if token.Type == OpeningParenthesis {
+		} else if token.tokenType == openingParenthesis {
 			// Push the current operator onto the stack.
 			stack = append(stack, token)
-		} else if token.Type == ClosingParenthesis {
+		} else if token.tokenType == closingParenthesis {
 			foundLeftParenthesis := false
 			for len(stack) > 0 {
-				if stack[len(stack)-1].Type == OpeningParenthesis {
+				if stack[len(stack)-1].tokenType == openingParenthesis {
 					foundLeftParenthesis = true
 					break
 				}
@@ -71,7 +71,7 @@ func shuntingYard(tokens *[]Token) []Token {
 				stack = stack[:len(stack)-1] // Pop
 			}
 			if !foundLeftParenthesis {
-				panic("Missing left parenthesis in expression.")
+				return nil, errors.New("Missing left parenthesis in expression.")
 			}
 			stack = stack[:len(stack)-1] // Pop the left parenthesis from the stack.
 		}
@@ -79,12 +79,12 @@ func shuntingYard(tokens *[]Token) []Token {
 
 	// Pop all operators from the stack
 	for len(stack) > 0 {
-		if stack[len(stack)-1].Type == OpeningParenthesis {
-			panic("Missing right parenthesis in expression.")
+		if stack[len(stack)-1].tokenType == openingParenthesis {
+			return nil, errors.New("Missing right parenthesis in expression.")
 		}
 		output = append(output, stack[len(stack)-1])
 		stack = stack[:len(stack)-1] // Pop
 	}
 
-	return output
+	return output, nil
 }

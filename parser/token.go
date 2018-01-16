@@ -14,11 +14,10 @@ const (
 	closingParenthesis
 )
 
-func (t *tokenType) getString() string {
-	switch ty := t; *ty {
-	case plus:
+func (t tokenType) getString() string {
+	if t == plus {
 		return "+"
-	case minus:
+	} else if t == minus {
 		return "-"
 	}
 	return ""
@@ -29,10 +28,9 @@ func (t *token) isOperand() bool {
 }
 
 func (t *token) isOperator() bool {
-	switch ty := t.tokenType; ty {
-	case plus:
+	if t.tokenType == plus {
 		return true
-	case minus:
+	} else if t.tokenType == minus {
 		return true
 	}
 	return false
@@ -43,10 +41,9 @@ func (t *token) IsLeftAssociative() bool {
 }
 
 func (t *token) GetPrecedence() int {
-	switch ty := t.tokenType; ty {
-	case plus:
+	if t.tokenType == plus {
 		return 1
-	case minus:
+	} else if t.tokenType == minus {
 		return 1
 	}
 	return 0

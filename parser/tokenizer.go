@@ -26,7 +26,7 @@ func tokenize(text string) ([]token, error) {
 		} else if value == ")" {
 			tokens = append(tokens, token{tokenType: closingParenthesis, value: ")"})
 		} else {
-			return nil, errors.New(fmt.Sprintf("Unknown token '%s'.", value))
+			return nil, fmt.Errorf("Unknown token '%s'.", value)
 		}
 	}
 

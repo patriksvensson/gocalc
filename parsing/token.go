@@ -14,6 +14,16 @@ const (
 	ClosingParenthesis
 )
 
+func (t *TokenType) getString() string {
+	switch ty := t; *ty {
+	case Plus:
+		return "+"
+	case Minus:
+		return "-"
+	}
+	return ""
+}
+
 func (t *Token) isOperand() bool {
 	return t.Type == Number
 }

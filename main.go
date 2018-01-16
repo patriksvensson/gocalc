@@ -12,7 +12,5 @@ func main() {
 		panic(err)
 	}
 
-	for _, token := range tokens {
-		fmt.Printf("%s", token.Value)
-	}
+	fmt.Printf("%v", parsing.Parse(&tokens))
 }

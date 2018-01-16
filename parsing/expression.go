@@ -1,7 +1,11 @@
 package parsing
 
+import (
+	"fmt"
+)
+
 type Expression interface {
-	Accept(*Visitor)
+	Accept(visitor *Visitor)
 }
 type Visitor interface {
 	VisitInteger(*IntegerExpression)
@@ -16,8 +20,12 @@ type IntegerExpression struct {
 	value int
 }
 
-func (exp *IntegerExpression) Visit(visitor *Visitor) {
+func (exp *IntegerExpression) Accept(visitor *Visitor) {
 	(*visitor).VisitInteger(exp)
+}
+
+func (exp *IntegerExpression) String() string {
+	return fmt.Sprintf("%d", exp.value)
 }
 
 /////////////////////////////////////
@@ -26,8 +34,14 @@ func (exp *IntegerExpression) Visit(visitor *Visitor) {
 
 type ArithmeticExpression struct {
 	operator TokenType
+	left     *Expression
+	right    *Expression
 }
 
-func (exp *ArithmeticExpression) Visit(visitor *Visitor) {
+func (exp *ArithmeticExpression) Accept(visitor *Visitor) {
 	(*visitor).VisitArithmetic(exp)
+}
+
+func (exp *ArithmeticExpression) String() string {
+	return fmt.Sprintf("(%v %s %v)", *exp.left, exp.operator.getString(), *exp.right)
 }

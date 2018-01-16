@@ -6,6 +6,14 @@ type Token struct {
 	Value string
 }
 
+const (
+	Number TokenType = iota
+	Plus
+	Minus
+	OpeningParenthesis
+	ClosingParenthesis
+)
+
 func (t *Token) isOperand() bool {
 	return t.Type == Number
 }
@@ -33,11 +41,3 @@ func (t *Token) GetPrecedence() int {
 	}
 	return 0
 }
-
-const (
-	Number             TokenType = 0
-	Plus                         = 1
-	Minus                        = 2
-	OpeningParenthesis           = 3
-	ClosingParenthesis           = 4
-)

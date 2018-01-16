@@ -3,12 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/patriksvensson/gocalc/parser"
+	"os"
+	"strings"
 )
 
 func main() {
-	res, err := parser.Evaluate("1 + (1 - 3) + 7 - (1)")
+	args := os.Args[1:]
+	if len(args) < 1 {
+		fmt.Println("usage: gocalc <expression>")
+		return
+	}
+
+	exp := strings.Join(args, " ")
+	res, err := parser.Evaluate(exp)
 	if err != nil {
-		fmt.Printf("Ooops! %s", err)
+		fmt.Printf("Ooops! %s\n", err)
 		return
 	}
 

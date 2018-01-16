@@ -1,5 +1,9 @@
 package parser
 
+import (
+	"errors"
+)
+
 type evaluator struct {
 	result int
 }
@@ -40,5 +44,5 @@ func (visitor *evaluator) visitArithmetic(exp *arithmeticExpression) (int, error
 		return left - right, nil
 	}
 
-	panic("Unknown operator in arithmetic expression.")
+	return 0, errors.New("Unknown operator in arithmetic expression.")
 }

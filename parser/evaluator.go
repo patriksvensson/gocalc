@@ -15,7 +15,7 @@ func Evaluate(text string) (int, error) {
 		return 0, err
 	}
 
-	return exp.accept(new(evaluator))
+	return exp.accept(&evaluator{})
 }
 
 func (visitor *evaluator) visitInteger(exp *integerExpression) (int, error) {

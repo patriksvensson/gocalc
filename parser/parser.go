@@ -16,6 +16,7 @@ func parse(tokens *[]token) (expression, error) {
 			if !token.isOperator() {
 				return nil, errors.New("Invalid expression. Expected operator.")
 			}
+
 			right := stack.Pop().(expression)
 			left := stack.Pop().(expression)
 

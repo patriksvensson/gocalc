@@ -37,7 +37,7 @@ func (t *token) isOperator() bool {
 }
 
 func (t *token) IsLeftAssociative() bool {
-	return false
+	return true
 }
 
 func (t *token) GetPrecedence() int {

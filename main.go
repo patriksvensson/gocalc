@@ -9,6 +9,8 @@ import (
 
 func main() {
 
+	parser.Evaluate("1+2-3+4")
+
 	// We need at least one argument.
 	args := os.Args[1:]
 	if len(args) < 1 {
